@@ -3,15 +3,17 @@ import "./App.css";
 import DetailsPage from "../src/Components/DetailsPage";
 import NewUser from "../src/Components/NewUser";
 import DisplayUsers from "../src/Components/DisplayUsers";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { UserArray, UserDetail } from "./index";
-import userListData from "./person-dummy-data.json";
+import { UserArray, UserDetail, CityArray, CountryArray } from "./index";
+import Axios from "axios";
 
 // Next to do is work with Axios (it is installed already)
 
 function App() {
-  const [userList, setUserList] = useState(userListData);
+  // const [userList, setUserList] = useState(userListData);
+
+  const [userList, setUserList] = useState([]);
 
   const providerUsers = useMemo(
     () => ({ userList, setUserList }),
@@ -25,28 +27,107 @@ function App() {
     [userDetail, setUserDetail]
   );
 
+  // const [countryList, setCountryList] = useState(countryData);
+  const [countryList, setCountryList] = useState([]);
+
+  const providerCountryList = useMemo(
+    () => ({ countryList, setCountryList }),
+    [countryList, setCountryList]
+  );
+
+  const [cityList, setCityList] = useState([]);
+
+  const providerCityList = useMemo(
+    () => ({ cityList, setCityList }),
+    [cityList, setCityList]
+  );
+
+  Axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
+  useEffect(() => {
+    Axios.get("https://localhost:7201/api/PeopleAPI")
+      .then((res) => {
+        setUserList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   Axios.get("https://localhost:7201/api/PeopleAPI").then((peopleData) => {
+  //     console.log(peopleData.data);
+  //   });
+  // }, []);
+
+  useEffect(() => {
+    Axios.get("https://localhost:7201/api/CountryAPI")
+      .then((res) => {
+        setCountryList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   Axios.get("https://localhost:7201/api/CountryAPI").then((countryData) =>
+  //     console.log(countryData.data)
+  //   );
+  // }, []);
+
+  useEffect(() => {
+    Axios.get("https://localhost:7201/api/CityAPI")
+      .then((res) => {
+        setCityList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   Axios.get("https://localhost:7201/api/CityAPI").then((cityData) =>
+  //     console.log(cityData.data)
+  //   );
+  // }, []);
+
+  console.log(userList);
+  console.log(cityList);
+  console.log(countryList);
+  // console.log(CountryArray);
+  // console.log(CityArray);
+  // console.log(UserArray);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route
           path="/"
           element={
-            <UserDetail.Provider value={providerUserDetails}>
-              <UserArray.Provider value={providerUsers}>
-                <NewUser></NewUser>
-                <DisplayUsers></DisplayUsers>
-              </UserArray.Provider>
-            </UserDetail.Provider>
+            <CountryArray.Provider value={providerCountryList}>
+              <CityArray.Provider value={providerCityList}>
+                <UserDetail.Provider value={providerUserDetails}>
+                  <UserArray.Provider value={providerUsers}>
+                    <NewUser></NewUser>
+                    <DisplayUsers></DisplayUsers>
+                  </UserArray.Provider>
+                </UserDetail.Provider>
+              </CityArray.Provider>
+            </CountryArray.Provider>
           }
         ></Route>
         <Route
           path="/Details"
           element={
-            <UserDetail.Provider value={providerUserDetails}>
-              <UserArray.Provider value={providerUsers}>
-                <DetailsPage></DetailsPage>
-              </UserArray.Provider>
-            </UserDetail.Provider>
+            <CountryArray.Provider value={providerCountryList}>
+              <CityArray.Provider value={providerCityList}>
+                <UserDetail.Provider value={providerUserDetails}>
+                  <UserArray.Provider value={providerUsers}>
+                    <DetailsPage></DetailsPage>
+                  </UserArray.Provider>
+                </UserDetail.Provider>
+              </CityArray.Provider>
+            </CountryArray.Provider>
           }
         ></Route>
         {/* <Route
@@ -64,4 +145,5 @@ function App() {
     </BrowserRouter>
   );
 }
+
 export default App;

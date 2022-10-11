@@ -1,9 +1,12 @@
 import { Table, Button, Container } from "react-bootstrap";
 import { UserArray, UserDetail } from "../index";
+// , CityArray, CountryArray
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 
 function DisplayUsers() {
+  // const { countryList } = useContext(CountryArray);
+  // const { cityList } = useContext(CityArray);
   const { userList, setUserList } = useContext(UserArray);
   const { userDetail, setUserDetail } = useContext(UserDetail);
   const [order, setOrder] = useState("ASC");
@@ -26,14 +29,29 @@ function DisplayUsers() {
     }
   };
 
+  // let getCountryId;
+
   const clickHandler = (user) => {
     const userData = {
       id: user.id,
       name: user.name,
-      phoneNumber: user.phoneNumber,
-      city: user.city,
-      country: user.country,
+      phoneNumber: user.phonenumber,
+      city: user.cityId,
+      // country: user.cityId
+      // country: user.cityName,
+      // country: user.country,
     };
+    // const countryId = countryList.filter(() => {
+
+    // }
+    // )
+    // const countryId = {
+    //   city
+    //   country: user.
+    //   // const getCityName = cityList.filter((obj) => {
+    //   //   return obj.id == userDetail.city;
+    //   // });
+    // }
 
     if (userDetail !== null) {
       setUserDetail(null);

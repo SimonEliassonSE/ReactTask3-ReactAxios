@@ -10,6 +10,8 @@ import App from "./App";
 
 export const UserArray = createContext(null);
 export const UserDetail = createContext(null);
+export const CityArray = createContext(null);
+export const CountryArray = createContext(null);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

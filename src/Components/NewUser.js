@@ -1,16 +1,17 @@
 import React, { useState, useContext } from "react";
 import { Button, Card, Form, Col, Row, Container } from "react-bootstrap";
-import cityData from "../city-dummy-data.json";
-import countryData from "../country-dummy-data.json";
-import { UserArray } from "../index";
+import { UserArray, CityArray, CountryArray } from "../index";
+import Axios from "axios";
 
 function NewUser() {
   const { userList, setUserList } = useContext(UserArray);
+  const { cityList } = useContext(CityArray);
+  const { countryList } = useContext(CountryArray);
 
   const [enteredName, setEnteredName] = useState("");
   const [enteredPhoneNumber, setEnteredPhoneNumber] = useState("");
   const [enteredCity, setExistingCity] = useState("");
-  const [enteredCountry, setExistingCountry] = useState("");
+  // const [enteredCountry, setExistingCountry] = useState("");
 
   const nameChangeHandler = (event) => {
     setEnteredName(event.target.value);
@@ -22,7 +23,7 @@ function NewUser() {
   const handleCountry = (e) => {
     const getCountryId = e.target.value;
     console.log(getCountryId);
-    setExistingCountry(getCountryId);
+    // setExistingCountry(getCountryId);
   };
 
   const handleCity = (e) => {
@@ -33,24 +34,32 @@ function NewUser() {
 
   const submitHandler1 = (event) => {
     event.preventDefault();
-
+    // Skulle kunna skapa yterligare en context med Language för att ge användaren ett språk.
     const newPerson = {
       id: userList.length + 1,
       name: enteredName,
-      phoneNumber: enteredPhoneNumber,
-      city: enteredCity,
-      country: enteredCountry,
+      phonenumber: enteredPhoneNumber,
+      cityId: enteredCity,
+      // country: enteredCountry,
     };
 
     console.log(newPerson);
     setUserList([...userList, newPerson]);
     console.log(userList);
 
+    Axios.post("https://localhost:7201/api/PeopleAPI", {
+      id: newPerson.id,
+      name: newPerson.name,
+      phonenumber: newPerson.phonenumber,
+      cityId: newPerson.cityId,
+    })
+      .then((res) => console.log("Posting data", res))
+      .catch((err) => console.log(err));
     // props.onSaveUserData(newPerson);
     setEnteredName("");
     setEnteredPhoneNumber("");
     setExistingCity("");
-    setExistingCountry("");
+    // setExistingCountry("");
   };
 
   return (
@@ -93,8 +102,8 @@ function NewUser() {
                     name="city"
                     onChange={(e) => handleCity(e)}
                   >
-                    {cityData.map((getCity, index) => (
-                      <option value={getCity.cityId} key={index}>
+                    {cityList.map((getCity, index) => (
+                      <option value={getCity.id} key={index}>
                         {getCity.cityName}
                       </option>
                     ))}
@@ -109,8 +118,8 @@ function NewUser() {
                     name="country"
                     onChange={(e) => handleCountry(e)}
                   >
-                    {countryData.map((getCountry, index) => (
-                      <option value={getCountry.countryId} key={index}>
+                    {countryList.map((getCountry, index) => (
+                      <option value={getCountry.id} key={index}>
                         {getCountry.countryName}
                       </option>
                     ))}
