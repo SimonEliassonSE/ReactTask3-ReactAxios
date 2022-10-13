@@ -42,11 +42,18 @@ function DetailsPage() {
     Axios.delete(`https://localhost:7201/api/PeopleAPI/${userDetail.id}`)
       .then((res) => console.log("Deleting data of id", res))
       .catch((err) => console.log(err));
-    setUserList((current) =>
-      current.filter((userList) => {
-        return userList.id !== userDetail.id;
-      })
-    );
+    // setUserList((current) =>
+    //   current.filter((userList) => {
+    //     return userList.id !== userDetail.id;
+    //   })
+    // );
+    // Axios.get("https://localhost:7201/api/PeopleAPI")
+    // .then((res) => {
+    //   setUserList(res.data);
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
   };
 
   console.log(userDetail);

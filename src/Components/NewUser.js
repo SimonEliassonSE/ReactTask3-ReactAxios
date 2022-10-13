@@ -32,28 +32,30 @@ function NewUser() {
     setExistingCity(getCityId);
   };
 
+  let newPerson;
+  let getHigestId = userList[userList.length - 1];
+  // console.log(getHigestId);
+
   const submitHandler1 = (event) => {
     event.preventDefault();
     // Skulle kunna skapa yterligare en context med Language för att ge användaren ett språk.
-    const newPerson = {
-      id: userList.length + 1,
+    newPerson = {
+      id: getHigestId.id + 1,
+      // id: userList[Array.length-1]
       name: enteredName,
       phonenumber: enteredPhoneNumber,
       cityId: enteredCity,
       // countryId: enteredCountry,
     };
 
-    console.log(newPerson);
-    setUserList([...userList, newPerson]);
-    console.log(userList);
-
     axios
-      .post("https://localhost:7201/api/PeopleAPI", {
-        id: newPerson.id,
-        name: newPerson.name,
-        phonenumber: newPerson.phonenumber,
-        cityId: newPerson.cityId,
-        countryId: newPerson.countryId,
+      .post(`https://localhost:7201/api/PeopleAPI`, {
+        Name: newPerson.name,
+        Phonenumber: newPerson.phonenumber,
+        CityId: newPerson.cityId,
+        // Name: "Charlie",
+        // Phonenumber: 708090605,
+        // CityId: -3,
       })
       .then(function (response) {
         console.log(response);
@@ -62,23 +64,24 @@ function NewUser() {
         console.log(error);
       });
 
-    // Axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
-    // Access-Control-Allow-Methods: PUT,DELETE,GET,OPTIONS
-    // Axios.post("https://localhost:7201/api/PeopleAPI", {
-    //   id: newPerson.id,
-    //   name: newPerson.name,
-    //   phonenumber: newPerson.phonenumber,
-    //   cityId: newPerson.cityId,
-    //   countryId: newPerson.countryId,
-    // })
-    //   .then((res) => console.log("Posting data", res))
-    //   .catch((err) => console.log(err));
-    // props.onSaveUserData(newPerson);
+    console.log(newPerson);
+    setUserList([...userList, newPerson]);
+    console.log(userList);
+
     setEnteredName("");
     setEnteredPhoneNumber("");
     setExistingCity("");
     setExistingCountry("");
   };
+
+  // axios
+  //   .get("https://localhost:7201/api/PeopleAPI")
+  //   .then((res) => {
+  //     setUserList(res.data);
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   }, []);
 
   return (
     <Container className="mb-5 mt-5">
